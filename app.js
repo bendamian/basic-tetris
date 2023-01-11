@@ -47,13 +47,43 @@ document.addEventListener("DOMContentLoaded", () => {
       squares[currentPosition + index].classList.add("tetromino");
     });
   }
-// Un drow the tetrominos
-
-function unDrow() {
-  current.forEach(index => {
-    squares[currentPosition + index].classList.remove("tetromino");
-  });
-}
   drow();
-  
+  // Un drow the tetrominos
+
+  function unDrow() {
+    current.forEach(index => {
+      squares[currentPosition + index].classList.remove("tetromino");
+    });
+  }
+  // moving down the tetromino
+
+  timerId = setInterval(moveDown, 1000);
+
+  function moveDown() {
+    unDrow();
+    currentPosition += width;
+    drow();
+    freeze();
+  }
+
+  // freeze function
+  function freeze() {
+    if (
+      current.some(index =>
+        squares[currentPosition + index + width].classList.contains("taken")
+      )
+    ) {
+      current.forEach(index =>
+        squares[currentPosition + index].classList.add("taken")
+      );
+
+      // add a new tetromino
+      randm = Math.floor(Math.random() * theTetrominos.length);
+      current = theTetrominos[randm][currentLocation];
+      currentPosition = 4;
+      drow();
+    }
+  }
+
+  // end of document. add event listeners
 });
